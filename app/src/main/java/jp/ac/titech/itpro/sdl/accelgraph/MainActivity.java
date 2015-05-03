@@ -46,7 +46,8 @@ public class MainActivity extends Activity implements SensorEventListener {
         sensorMgr = (SensorManager) getSystemService(SENSOR_SERVICE);
         accelerometer = sensorMgr.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         if (accelerometer == null) {
-            Toast.makeText(this, "No acceleromter available", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.toast_no_accel_error),
+                    Toast.LENGTH_SHORT).show();
             finish();
             return;
         }

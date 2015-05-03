@@ -17,18 +17,17 @@ public class GraphView extends View {
     private int ndata = NDATA_INIT;
     private float[] vs = new float[NDATA_INIT];
     private int idx = 0;
-    private int width, height;
     private int x0, y0, ewidth;
     private int dw = 5, dh = 1;
 
-    private Paint paint = new Paint();
+    private final Paint paint = new Paint();
 
     public GraphView(Context context) {
-        super(context);
+        this(context, null);
     }
 
     public GraphView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs, 0);
     }
 
     public GraphView(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -39,15 +38,13 @@ public class GraphView extends View {
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         Log.i(TAG, "onSizeChanged: w=" + w + " h=" + h);
-        width = w;
-        height = h;
-        ndata = width / dw;
-        x0 = (width - dw * ndata) / 2;
-        y0 = height / 2;
+        ndata = w / dw;
+        x0 = (w - dw * ndata) / 2;
+        y0 = h / 2;
         ewidth = x0 + dw * (ndata - 1);
 
         if (y0 / Ymax >= dh + 1)
-            dh = (int)(y0 / Ymax);
+            dh = (int) (y0 / Ymax);
         if (ndata > vs.length) {
             idx = 0;
             vs = new float[ndata];
@@ -61,12 +58,13 @@ public class GraphView extends View {
         // grid lines
         paint.setColor(Color.argb(75, 255, 255, 255));
         paint.setStrokeWidth(1);
-        for (int y = y0; y < height; y += dh * 5)
+        int h = canvas.getHeight();
+        for (int y = y0; y < h; y += dh * 5)
             canvas.drawLine(x0, y, ewidth, y, paint);
         for (int y = y0; y > 0; y -= dh * 5)
             canvas.drawLine(x0, y, ewidth, y, paint);
         for (int x = x0; x < dw * ndata; x += dw * 5)
-            canvas.drawLine(x, 0, x, height, paint);
+            canvas.drawLine(x, 0, x, h, paint);
 
         // y0 line
         paint.setColor(Color.CYAN);
