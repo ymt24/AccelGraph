@@ -29,7 +29,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     private float vx, vy, vz;
     private float rate;
     private int accuracy;
-    private long prevTs;
+    private long prevts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,8 +77,8 @@ public class MainActivity extends Activity implements SensorEventListener {
         vx = event.values[0];
         vy = event.values[1];
         vz = event.values[2];
-        rate = ((float) (event.timestamp - prevTs)) / (1000 * 1000);
-        prevTs = event.timestamp;
+        rate = ((float) (event.timestamp - prevts)) / (1000 * 1000);
+        prevts = event.timestamp;
     }
 
     @Override
@@ -95,18 +95,16 @@ public class MainActivity extends Activity implements SensorEventListener {
                         public void run() {
                             rateView.setText(Float.toString(rate));
                             accuracyView.setText(Integer.toString(accuracy));
-                            xView.setVal(vx);
-                            yView.setVal(vy);
-                            zView.setVal(vz);
-                            xView.invalidate();
-                            yView.invalidate();
-                            zView.invalidate();
+                            xView.addData(vx, true);
+                            yView.addData(vy, true);
+                            zView.addData(vz, true);
                         }
                     });
                     Thread.sleep(GRAPH_REFRESH_WAIT_MS);
                 }
             }
             catch (InterruptedException e) {
+                Log.e(TAG, e.toString());
                 th = null;
             }
         }

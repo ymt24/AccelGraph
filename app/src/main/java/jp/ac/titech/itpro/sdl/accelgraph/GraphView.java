@@ -83,8 +83,10 @@ public class GraphView extends View {
         }
     }
 
-    public void setVal(float val) {
+    public void addData(float val, boolean invalidate) {
         vs[idx] = val;
         idx = (idx + 1) % ndata;
+        if (invalidate)
+            invalidate();
     }
 }
