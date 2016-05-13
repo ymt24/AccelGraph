@@ -44,7 +44,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         zView = (GraphView) findViewById(R.id.z_view);
 
         sensorMgr = (SensorManager) getSystemService(SENSOR_SERVICE);
-        accelerometer = sensorMgr.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        accelerometer = sensorMgr.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         if (accelerometer == null) {
             Toast.makeText(this, getString(R.string.toast_no_accel_error),
                     Toast.LENGTH_SHORT).show();
@@ -85,6 +85,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         //zの重み付き平均
         vz = alpha * vz + (1 - alpha) * event.values[2];
 
+        Log.i(TAG, "x = " + vx + ", y = " + vy + ", z = " + vz + " ( org : x = " + event.values[0] + ", y = " + event.values[1] + ", z = " + event.values[2]);
 
         rate = ((float) (event.timestamp - prevts)) / (1000 * 1000);
         prevts = event.timestamp;
