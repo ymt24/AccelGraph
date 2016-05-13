@@ -72,11 +72,36 @@ public class MainActivity extends Activity implements SensorEventListener {
         sensorMgr.unregisterListener(this);
     }
 
+    private final int N = 5;
+    private float[] ax = new float[N], ay = new float[N], az = new float[N];
+    private int idx = 0, idy = 0, idz = 0;
+
     @Override
     public void onSensorChanged(SensorEvent event) {
-        vx = event.values[0];
-        vy = event.values[1];
-        vz = event.values[2];
+        //xの移動平均
+        ax[idx] = event.values[0];
+        float sx = 0;
+        for(int i = 0; i < N; i++){
+            sx += ax[i];
+        }
+        vx = sx / N;
+        idx = (idx + 1) % N;
+        //yの移動平均
+        ay[idy] = event.values[1];
+        float sy = 0;
+        for(int i = 0; i < N; i++){
+            sy += ay[i];
+        }
+        vy = sx / N;
+        idy = (idy + 1) % N;
+        //zの移動平均
+        az[idz] = event.values[2];
+        float sz = 0;
+        for(int i = 0; i < N; i++){
+            sz += az[i];
+        }
+        vz = sz / N;
+
         rate = ((float) (event.timestamp - prevts)) / (1000 * 1000);
         prevts = event.timestamp;
     }
